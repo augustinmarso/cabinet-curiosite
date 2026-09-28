@@ -1,0 +1,10 @@
+{
+  "name": "cabinet-curiosite",
+  "version": "0.2.0",
+  "private": true,
+  "description": "Cabinet de curiosités imprimable : images → objets 3D à l'échelle, boîtes à découper au laser.",
+  "scripts": {
+    "start": "node --use-system-ca server.js"
+  },
+  "engines": { "node": ">=22.15" }
+}

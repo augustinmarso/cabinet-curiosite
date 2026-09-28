@@ -1,0 +1,5 @@
+.env
+devis/
+modeles/
+generations.jsonl
+node_modules/

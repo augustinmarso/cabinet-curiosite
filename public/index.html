@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cabinet de curiosités</title>
+<meta name="description" content="Glissez vos images, elles deviennent des objets 3D imprimables, rangés à l'échelle dans un cabinet de curiosités à découper au laser.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230c0a08'/%3E%3Ccircle cx='16' cy='16' r='7' fill='%23c9a45c'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<!-- ───────────── 1. La salle obscure ───────────── -->
+<section class="salle" id="salle" aria-label="La salle obscure">
+  <header class="salle__titre">
+    <p class="surtitre">Cabinet de curiosités · édition imprimable</p>
+    <h1>La curiosité<br><em>n'a pas de limite.</em></h1>
+    <p class="chapeau">Entre le passé, la recherche et l'innovation, prenez la lampe et parcourez la salle.</p>
+  </header>
+
+  <div class="salle__scene" id="salle-scene">
+    <canvas class="nuit" id="nuit" aria-label="Cabinet plongé dans le noir : promenez la lampe pour révéler les objets"></canvas>
+    <div class="cartels" id="cartels" aria-live="polite"></div>
+    <p class="salle__charge" id="charge">Chargement des curiosités…</p>
+  </div>
+
+  <div class="salle__pied">
+    <span class="compteur" id="compteur">0 / 10 curiosités révélées</span>
+    <span class="note">Modèles 3D Smithsonian Open Access (CC0)</span>
+    <button class="lien" id="allumer" type="button">Allumer la salle</button>
+    <a class="bouton" href="#atelier">Composer mon cabinet ↓</a>
+  </div>
+</section>
+
+<!-- ───────────── Le laboratoire (bento) ───────────── -->
+<section class="bento" id="laboratoire" aria-labelledby="labo-titre">
+  <p class="surtitre">I. Le laboratoire</p>
+  <h2 id="labo-titre"><span data-scramble>Du pixel</span> <em data-scramble>à l'objet.</em></h2>
+
+  <div class="bento__grille">
+    <article class="case case--nebuleuse">
+      <canvas id="nebuleuse" aria-hidden="true"></canvas>
+      <div class="case__texte">
+        <p class="etiquette">01 · Nébuleuse</p>
+        <h3 data-scramble>Une image devient matière</h3>
+        <p>Ces signes sont le vrai code du site. C'est lui qui détoure, gonfle et met à l'échelle chaque objet. Passez la lampe dessus.</p>
+      </div>
+    </article>
+
+    <article class="case case--echelle">
+      <p class="etiquette">02 · Échelle</p>
+      <div class="echelle">
+        <span class="echelle__rapport">1/5</span>
+        <span class="echelle__barre" aria-hidden="true"><i></i></span>
+      </div>
+      <p class="echelle__legende"></p>
+    </article>
+
+    <article class="case case--moteurs">
+      <p class="etiquette">03 · Moteurs</p>
+      <h3 data-scramble>La chaîne de fabrication</h3>
+      <pre class="terminal" aria-label="Étapes : estimation de taille, modèle 3D, découpe laser"></pre>
+    </article>
+
+    <article class="case case--entures">
+      <p class="etiquette">04 · Entures</p>
+      <svg class="entures" aria-hidden="true"></svg>
+      <p>Contreplaqué 3 mm, emboîté sans colle ni vis. Tracé par le même code que vos plans.</p>
+    </article>
+
+    <article class="case case--collections">
+      <p class="etiquette">05 · Collections</p>
+      <p class="grand" data-scramble>CC0</p>
+      <p>Met · Chicago · Cleveland · Smithsonian 3D</p>
+    </article>
+
+    <article class="case case--axes">
+      <p class="etiquette">06 · Sans limite</p>
+      <p class="axes"><span data-scramble>Passé</span> <span data-scramble>Recherche</span> <span data-scramble>Innovation</span></p>
+    </article>
+
+    <a class="case case--cta" href="#atelier">
+      <p class="etiquette">07 · À vous</p>
+      <h3 data-scramble>Composer mon cabinet</h3>
+      <span class="fleche" aria-hidden="true">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- ───────────── 2. L'atelier ───────────── -->
+<section class="atelier" id="atelier" aria-labelledby="atelier-titre">
+  <div class="atelier__entete">
+    <div>
+      <p class="surtitre">II. L'atelier</p>
+      <h2 id="atelier-titre">Glissez vos curiosités</h2>
+      <p class="chapeau">Chaque image devient un objet en relief. Sa taille réelle est estimée, et vous pouvez la corriger. L'échelle est la même pour tous les objets du cabinet.</p>
+      <p class="note" id="moteurs"></p>
+    </div>
+    <div class="reglages" role="group" aria-label="Réglages du cabinet">
+      <div class="reglage">
+        <span class="etiquette">Échelle</span>
+        <div class="segment" id="echelle" role="radiogroup">
+          <button type="button" role="radio" aria-checked="true" data-v="0.2">1/5</button>
+          <button type="button" role="radio" aria-checked="false" data-v="0.5">1/2</button>
+        </div>
+      </div>
+      <label class="reglage">
+        <span class="etiquette">Largeur max. du meuble</span>
+        <span class="champ"><input type="number" id="largeur" min="20" max="200" step="5" value="60" title="Le meuble choisit seul ses proportions, sans dépasser cette largeur"> cm</span>
+      </label>
+      <label class="reglage">
+        <span class="etiquette">Jeu autour de l'objet</span>
+        <span class="champ"><input type="number" id="jeu" min="0.3" max="5" step="0.1" value="0.8"> cm</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="atelier__corps">
+    <aside class="collection">
+      <label class="depot" id="depot">
+        <input type="file" id="fichiers" accept="image/*" multiple hidden>
+        <span class="depot__icone" aria-hidden="true"></span>
+        <strong>Déposez des images ici</strong>
+        <span>ou cliquez pour choisir · fond uni conseillé</span>
+      </label>
+      <button class="lien" id="exemples" type="button">Essayer avec des exemples du domaine public</button>
+
+      <form class="collections" id="recherche" role="search">
+        <label class="etiquette" for="q">Puiser dans les collections</label>
+        <div class="collections__champ">
+          <input id="q" type="search" placeholder="astrolabe, fossile, crâne…" autocomplete="off">
+          <button class="bouton" type="submit">Chercher</button>
+        </div>
+        <p class="note" id="recherche-etat">Met · Art Institute of Chicago · Cleveland · Smithsonian 3D. Œuvres du domaine public (CC0), avec leurs dimensions réelles.</p>
+        <ul class="trouvailles" id="trouvailles"></ul>
+      </form>
+
+      <ol class="objets" id="objets" aria-live="polite"></ol>
+    </aside>
+
+    <div class="vitrine">
+      <div class="vitrine__scene" id="scene">
+        <p class="vitrine__vide" id="vide">Le cabinet est vide.<br>Déposez une première image.</p>
+      </div>
+      <div class="vitrine__barre">
+        <span class="mesure" id="dimensions">—</span>
+        <label class="bascule"><input type="checkbox" id="lumiere"> Lumière de la salle</label>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────── 3. Fabriquer ───────────── -->
+<section class="fabrique" id="fabrique" aria-labelledby="fab-titre">
+  <p class="surtitre">III. Fabriquer</p>
+  <h2 id="fab-titre">Imprimer, découper, ou commander</h2>
+
+  <div class="fabrique__grille">
+    <article class="carte">
+      <h3>Imprimer les objets</h3>
+      <p>Un fichier STL par objet, en millimètres, déjà à l'échelle du cabinet. Si un fichier porte la mention « à réparer », lancez la réparation automatique de votre trancheur (PrusaSlicer, Bambu Studio) avant d'imprimer.</p>
+      <div class="liste-fichiers" id="stl"></div>
+    </article>
+
+    <article class="carte">
+      <h3>Découper les boîtes</h3>
+      <p>Contreplaqué <span id="ep">3</span> mm, assemblage à entures, face avant ouverte. Tracés SVG : <span class="rouge">rouge</span> pour la découpe, <span class="bleu">bleu</span> pour la gravure.</p>
+      <label class="reglage reglage--ligne">
+        <span class="etiquette">Kerf</span>
+        <span class="champ"><input type="number" id="kerf" min="0" max="0.5" step="0.01" value="0.1"> mm</span>
+      </label>
+      <label class="reglage reglage--ligne">
+        <span class="etiquette">Plateau</span>
+        <select id="plateau">
+          <option value="600x400">600 × 400 mm</option>
+          <option value="800x500">800 × 500 mm</option>
+          <option value="400x300">400 × 300 mm</option>
+        </select>
+      </label>
+      <div class="liste-fichiers" id="svg"></div>
+    </article>
+
+    <article class="carte carte--commande">
+      <h3>Commander le cabinet</h3>
+      <p>Nous imprimons, découpons et assemblons le cabinet pour vous. Le prix ci-dessous est indicatif, vous recevrez un devis précis.</p>
+      <dl class="recap" id="recap"></dl>
+      <form id="devis" class="devis">
+        <input name="nom" placeholder="Nom" autocomplete="name" required>
+        <input name="email" type="email" placeholder="E-mail" autocomplete="email" required>
+        <textarea name="message" rows="3" placeholder="Finition, délai, questions…"></textarea>
+        <button class="bouton" type="submit">Demander un devis</button>
+        <p class="note" id="devis-etat" role="status"></p>
+      </form>
+    </article>
+  </div>
+</section>
+
+<footer class="pied">
+  Modèles 3D : Smithsonian Open Access (CC0). Exemples : The Metropolitan Museum of Art (CC0) et R. Hooke, Micrographia (1665, domaine public, via Wikimedia Commons). Collections interrogées : Met, Art Institute of Chicago, Cleveland Museum of Art, Smithsonian 3D.
+</footer>
+
+<script type="module" src="js/lanterne.js"></script>
+<script type="module" src="js/atelier.js"></script>
+<script type="module" src="js/bento.js"></script>
+</body>
+</html>
