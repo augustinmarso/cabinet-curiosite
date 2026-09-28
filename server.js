@@ -79,7 +79,15 @@ async function proxy(res, cible) {
   if (!collections.autorise(cible)) return send(res, 403, { error: 'hôte non autorisé' });
   let e = cache.get(cible);
   if (!e) {
-    const r = await fetch(cible, { signal: AbortSignal.timeout(60000), headers: { 'User-Agent': 'cabinet-curiosite/0.2' } });
+    // Redirections suivies à la main : chaque étape doit rester sur un hôte autorisé
+    let url = cible, r;
+    for (let sauts = 0; ; sauts++) {
+      r = await fetch(url, { redirect: 'manual', signal: AbortSignal.timeout(60000), headers: { 'User-Agent': 'cabinet-curiosite/0.3' } });
+      if (r.status < 300 || r.status >= 400) break;
+      const suivante = new URL(r.headers.get('location') || '', url).href;
+      if (sauts >= 3 || !collections.autorise(suivante)) return send(res, 502, { error: 'redirection refusée' });
+      url = suivante;
+    }
     if (!r.ok) return send(res, 502, { error: 'source ' + r.status });
     e = { type: r.headers.get('content-type') || 'application/octet-stream', corps: Buffer.from(await r.arrayBuffer()) };
     if (cache.size > 200) cache.delete(cache.keys().next().value);

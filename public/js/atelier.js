@@ -27,7 +27,8 @@ const materiau = new THREE.MeshStandardMaterial({ vertexColors: true, roughness:
 const materiauBlanc = new THREE.MeshStandardMaterial({ color: 0xe8e0d0, roughness: .6 });
 
 // Chemins relatifs : le site fonctionne aussi dans un sous-dossier (GitHub Pages)
-const configPrete = fetch('api/config').then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(c => {
+const surPages = location.hostname.endsWith('github.io'); // pas de serveur : inutile de le chercher
+const configPrete = (surPages ? Promise.reject() : fetch('api/config')).then(r => { if (!r.ok) throw new Error(); return r.json(); }).then(c => {
   etat.config = c;
   const m = [];
   m.push(c.estimate ? 'Taille : Gemini' : 'Taille : d\'après le nom (pas de clé Gemini)');
