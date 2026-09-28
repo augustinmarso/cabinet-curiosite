@@ -25,12 +25,12 @@ Chaque génération est journalisée dans `generations.jsonl` (suivi des dépens
 
 ## Parcours
 
-1. **Salle obscure** (scène 3D) : un meuble à niches avec 10 modèles Smithsonian Open Access (CC0, dans `public/modeles-salle/`) plongés dans le noir ; la lampe suit le pointeur et un objet longtemps éclairé reste révélé, avec son cartel. Deux niches vides renvoient vers l'atelier.
+1. **Salle obscure** (scène 3D) : la main droite d'Abraham Lincoln (moulage de Leonard Volk, 1860, Smithsonian, CC0) dans le noir. La lampe suit le pointeur ; au-dessus de la main elle passe derrière : contre-jour, flamme masquée par les doigts. Plus la main reçoit de lumière, plus elle et son cartel se révèlent. Grain argentique sur tout le site.
    **Le laboratoire** (bento) : nébuleuse faite du vrai code source du site, exemples d'échelle calculés par `meuble.js`, entures tracées par `laser.js`, titres « scramble » (portés en JS depuis le registre shadcn @fancy).
 2. **Atelier** : dépôt d'images ou recherche dans les collections (Met, Art Institute of Chicago, Cleveland : images CC0 avec dimensions ; Smithsonian 3D : modèles GLB CC0 sans coût de génération).
    - Échelle commune 1/5 ou 1/2 ; les objets trop petits sont agrandis, les trop grands réduits, et c'est signalé.
    - Chaque boîte est taillée pour son objet (jeu réglable), les boîtes sont rangées par étagères dans le meuble.
-   - Le meuble choisit seul sa largeur (proportions d'un cabinet ≈ 1,15 × plus haut que large, le moins de vide possible, sans dépasser la largeur max.) ; chaque changement est animé.
+   - Casiers en **bento** : les petites boîtes s'empilent en colonnes, puis tous les casiers s'étirent pour remplir exactement le rectangle du meuble (aucun vide, profondeur commune). Le meuble choisit seul sa largeur (≈ 1,15 × plus haut que large, le moins d'agrandissement possible, sans dépasser la largeur max.) ; chaque changement est animé.
 3. **Fabriquer** : STL par objet (mm), plateaux SVG laser (contreplaqué 3 mm, entures, kerf réglable ; rouge = découpe, bleu = gravure), demande de devis enregistrée dans `devis/`.
 
 ## Fichiers

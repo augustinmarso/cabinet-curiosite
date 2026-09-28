@@ -284,7 +284,9 @@ function recalculer() {
     else { m = new THREE.Mesh(o.geometrie, o.geometrie.attributes.color ? materiau : materiauBlanc); m.castShadow = m.receiveShadow = true; }
     return { o, maillage: m, k };
   });
-  const agencement = agencer(placees.map(p => p.o.boite), etat.largeurMax);
+  // Bento : chaque boîte grandit jusqu'à remplir son casier dans le rectangle du meuble
+  const agencement = agencer(placees.map(p => p.o.boite), etat.largeurMax, EPAISSEUR_CM);
+  placees.forEach((p, i) => { p.o.boiteMin = p.o.boite; p.o.boite = agencement.boites[i]; });
   vitrine.afficher(placees.map((p, i) => ({ id: p.o.id, maillage: p.maillage, k: p.k, boite: p.o.boite, position: agencement.positions[i] })), agencement, EPAISSEUR_CM);
   vitrine.cadrer();
   etat.calcul = { prets, agencement };
